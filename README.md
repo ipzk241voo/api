@@ -27,7 +27,7 @@ $ npm run start:prod
 
 # Postman
 ```
-https://github.com/ipzk241voo/api/blob/v1/API.postman_collection.json
+https://github.com/ipzk241voo/api/blob/v2/API.postman_collection.json
 ```
 
 ## Base URL
