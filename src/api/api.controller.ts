@@ -1,7 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiService } from './api.service';
+import { RolesGuard } from 'src/auth/roles/roles.guard';
+import { Roles } from 'src/auth/roles/roles.decorator';
+import { JwtaAthGuard } from 'src/auth/jwt/jwtauth.guard';
+
 
 @Controller('api')
+@UseGuards(JwtaAthGuard, RolesGuard)
 export class ApiController {
     constructor(
         private readonly apiService: ApiService
@@ -11,6 +16,7 @@ export class ApiController {
         "products",
         "products/:productId"
     ])
+    @Roles("USER")
     async products(
         @Param("productId") productId: string,
         @Body("selects") selects?: Array<string>,
@@ -24,6 +30,7 @@ export class ApiController {
     }
 
     @Post("products")
+    @Roles("ADMIN")
     async createProduct(
         @Body() data: any
     ) {
@@ -31,6 +38,7 @@ export class ApiController {
     }
 
     @Patch("products/:productId")
+    @Roles("ADMIN")
     async updateProduct(
         @Param("productId") productId: string,
         @Body() data: any
@@ -39,6 +47,7 @@ export class ApiController {
     }
 
     @Delete("product/:productId")
+    @Roles("ADMIN")
     async deleteProduct(
         @Param("productId") productId: string
     ) {

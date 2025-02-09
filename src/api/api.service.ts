@@ -7,7 +7,7 @@ import { ProductType } from 'src/types/Product';
 @Injectable()
 export class ApiService {
     constructor(
-        @InjectModel("product", "test") private product: Model<Product>
+        @InjectModel("product") private product: Model<Product>
     ) { }
 
     async getProduct(_id: string) {
@@ -27,8 +27,6 @@ export class ApiService {
     }
 
     async createProduct(product: any) {
-        console.log(product);
-
         const allowedKeys = Object.keys(this.product.schema.obj) as (keyof ProductType)[];
         const extraKeys = Object.keys(product).filter(key => !allowedKeys.includes(key as keyof ProductType));
 
