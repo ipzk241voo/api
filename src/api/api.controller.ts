@@ -25,7 +25,7 @@ export class ApiController {
 
     @Post("products")
     async createProduct(
-        @Body("product") data: any
+        @Body() data: any
     ) {
         return this.apiService.createProduct(data);
     }

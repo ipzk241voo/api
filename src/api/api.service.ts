@@ -11,14 +11,24 @@ export class ApiService {
     ) { }
 
     async getProduct(_id: string) {
-        return this.product.findOne({ _id });
+        try {
+            const getProduct = await this.product.findOne({ _id });
+            if (!getProduct) {
+                throw new BadRequestException(`Nothing found for your id [${_id}]!`)
+            }
+            return getProduct;
+        } catch (err) {
+            throw new BadRequestException(`Invalid ID format or unexpected error`, err.message);
+        }
     }
 
     async getProductList(limit: number, page: number, selects?: Array<string>) {
         return this.product.find({}, selects, { limit, skip: (page * limit) });
     }
 
-    async createProduct(product: ProductType) {
+    async createProduct(product: any) {
+        console.log(product);
+
         const allowedKeys = Object.keys(this.product.schema.obj) as (keyof ProductType)[];
         const extraKeys = Object.keys(product).filter(key => !allowedKeys.includes(key as keyof ProductType));
 
@@ -71,11 +81,18 @@ export class ApiService {
     async deleteProduct(
         _id: string
     ) {
-        const getProduct = await this.product.exists({ _id });
-        if (!getProduct) {
-            throw new BadRequestException(`Product _id: [${_id}] is not defined!`)
+        try {
+            if (!_id) {
+                throw new BadRequestException(`Product ID is required.`);
+            }
+            const getProduct = await this.product.exists({ _id }).catch(err => err);
+            if (!getProduct) {
+                throw new BadRequestException(`Product _id: [${_id}] is not defined!`)
+            }
+            await this.product.deleteOne({ _id });
+            return { message: "ok" }
+        } catch (err) { 
+            throw new BadRequestException(`Invalid ID format or unexpected error`, err.message);
         }
-        await this.product.deleteOne({ _id });
-        return { message: "ok" } 
     }
 }
