@@ -23,6 +23,13 @@ $ npm run start:prod
 
 # API Documentation
 
+### Документацію зробив як на постмені так і в README.md
+
+# Postman
+```
+https://github.com/ipzk241voo/api/blob/v1/API.postman_collection.json
+```
+
 ## Base URL
 
 ```
