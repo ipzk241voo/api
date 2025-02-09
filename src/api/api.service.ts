@@ -71,6 +71,11 @@ export class ApiService {
     async deleteProduct(
         _id: string
     ) {
-        return this.product.deleteOne({ _id });
+        const getProduct = await this.product.exists({ _id });
+        if (!getProduct) {
+            throw new BadRequestException(`Product _id: [${_id}] is not defined!`)
+        }
+        await this.product.deleteOne({ _id });
+        return { message: "ok" } 
     }
 }

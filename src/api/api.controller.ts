@@ -42,6 +42,6 @@ export class ApiController {
     async deleteProduct(
         @Param("productId") productId: string
     ) {
-        return this.deleteProduct(productId)
+        return this.apiService.deleteProduct(productId)
     }
 }
